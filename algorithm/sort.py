@@ -85,9 +85,69 @@ def merge_sort2(l):
     return result
 
 
+def quick_sort(l):
+    if len(l) <= 1:
+        return l
+
+    left = list()
+    mid = list()
+    right = list()
+
+    pivot = l[int(len(l) / 2)]
+    for i in l:
+        if i > pivot:
+            right.append(i)
+        elif i < pivot:
+            left.append(i)
+        else:
+            mid.append(i)
+    return quick_sort(left) + mid + quick_sort(right)
+
+
+def merge_sort3(l):
+    if len(l) <= 1:
+        return l
+
+    mid = int(len(l) / 2)
+    left = merge_sort3(l[:mid])
+    right = merge_sort3(l[mid:])
+
+    i = 0
+    j = 0
+    result = []
+    while i < len(left) and j < len(right):
+        if left[i] > right[j]:
+            result.append(right[j])
+            j += 1
+        else:
+            result.append(left[i])
+            i += 1
+    result += left[i:]
+    result += right[j:]
+    return result
+
+
+def bucket_sort(l):
+    max_value = max(l)
+    each_value = max_value // len(l)
+    print(max_value)
+    buckets = [[] for _ in range(len(l))]
+    print(len(buckets))
+    for v in l:
+        print(v)
+        print(each_value)
+        print(v // each_value)
+        buckets[v // each_value].append(v)
+    result = []
+    for bucket in buckets:
+        if len(bucket) > 0:
+            result += insertion_sort(bucket)
+    return result
+
+
 import time
 
-rlist = random.sample(range(1, 1001), 1000)
+rlist = random.sample(range(1, 2000), 1000)
 
 print(rlist)
 start = time.time()
@@ -113,4 +173,19 @@ print(rlist)
 start = time.time()
 print(merge_sort2(rlist))
 print("merge2", time.time() - start)
+
+print(rlist)
+start = time.time()
+print(merge_sort3(rlist))
+print("merge3", time.time() - start)
+
+print(rlist)
+start = time.time()
+print(quick_sort(rlist))
+print("quick_sort", time.time() - start)
+
+print(rlist)
+start = time.time()
+print(bucket_sort(rlist))
+print("bucket_sort", time.time() - start)
 # todo: bubble, selection, merge, quick sort, timsort, radix sort, bucket sort
